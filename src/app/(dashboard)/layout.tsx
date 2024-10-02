@@ -11,7 +11,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <div className="min-h-screen flex">
+      <div className="min-h-screen flex bg-slate-100">
         {/* LEFT */}
         <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] bg-zinc-800 text-white p-4">
           <Link href="/" className="flex items-center justify-center gap-2 lg:justify-start ">
