@@ -89,8 +89,8 @@ const FinanceChart = () => {
             <Image src="/moreDark.png" alt='more' width={20} height={20} />
         </div>
         {/* CHART */}
-        <div className="w-full h-full">
-        <ResponsiveContainer>
+     
+        <ResponsiveContainer width="100%" height="100%">
         <LineChart
           width={500}
           height={300}
@@ -112,7 +112,7 @@ const FinanceChart = () => {
         </LineChart>
       </ResponsiveContainer>
         </div>
-    </div>
+   
   )
 }
 
