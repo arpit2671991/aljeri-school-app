@@ -30,7 +30,7 @@ const AdminPage = () => {
         </div>
       </div>
       {/* Bottom Chart */}
-      <div className="w-full  lg:h-[500px]">
+      <div className="w-full  lg:h-[500px] hidden lg:block">
         <FinanceChart />
       </div>
       </div>
