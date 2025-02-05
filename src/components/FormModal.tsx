@@ -3,7 +3,23 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image';
-import TeacherForm from './forms/TeacherForm';
+import dynamic from 'next/dynamic';
+// import TeacherForm from './forms/TeacherForm';
+// import StudentForm from './forms/StudentForm';
+
+const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+  loading: () => <h1>loading...</h1>
+})
+const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+  loading: () => <h1>loading...</h1>
+})
+
+const forms : {
+  [key: string] : (type: "create" | "update", data? : any) => JSX.Element;
+} = {
+  teacher: (type, data) => <TeacherForm type={type} data={data} />,
+  student: (type, data) => <StudentForm type={type} data={data} />,
+}
 
 const FormModal = ({table, type, id, data}:{
   table: 
@@ -39,11 +55,13 @@ const FormModal = ({table, type, id, data}:{
         <span className='text-center font-medium'>Are you sure want to delete this {table}?</span>
         <button className='bg-red-700 text-white px-4 py-2 rounded-md border-none w-max self-center'>Delete</button>
       </form>
-    ) : (
+    ) : type === "create" || type === "update" ? (
     
-      <TeacherForm type='create' />
+      // <TeacherForm type='update' data={data} />
+      // <StudentForm type='create' />
+      forms[table](type, data)
      
-    )
+    ) : "Form not found"
   }
   
   

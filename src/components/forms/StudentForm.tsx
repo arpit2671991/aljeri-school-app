@@ -29,7 +29,7 @@ import Image from 'next/image';
 type Inputs = z.infer<typeof schema>;
 
 
-const TeacherForm = ({type, data, }:{type:"create" | "update"; data?: any; }) => {
+const StudentForm = ({type, data, }:{type:"create" | "update"; data?: any; }) => {
 
     const {
         register,
@@ -44,7 +44,7 @@ const TeacherForm = ({type, data, }:{type:"create" | "update"; data?: any; }) =>
       })
   return (
   <form className='flex flex-col gap-8 w-full' onSubmit={onSubmit}>
-    <h1 className='text-xl font-semibold'>add new teacher</h1>
+    <h1 className='text-xl font-semibold'>add new student</h1>
     <span className='text-xs text-gray-500 font-medium'>login details</span>
     <div className='flex justify-between flex-wrap gap-4'>
     <InputField label='username' name='username' defaultValue={data?.username} register={register} error={errors?.username} />
@@ -82,4 +82,4 @@ const TeacherForm = ({type, data, }:{type:"create" | "update"; data?: any; }) =>
   )
 }
 
-export default TeacherForm
+export default StudentForm

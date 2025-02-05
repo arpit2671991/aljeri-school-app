@@ -4,6 +4,7 @@ import BigCalendar from '@/components/BigCalendar'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import FormModal from '@/components/FormModal'
 
 const SingleTeacherPage = () => {
   return (
@@ -18,7 +19,25 @@ const SingleTeacherPage = () => {
               <Image src="https://images.pexels.com/photos/2888150/pexels-photo-2888150.jpeg?auto=compress&cs=tinysrgb&w=1200" alt='' width={144} height={144} className='w-36 h-36 rounded-full object-cover' />
             </div>
             <div className='w-2/3 flex flex-col justify-between gap-4'>
+            <div className='flex items-center gap-4'>
             <h1 className='text-xl font-semibold'>Leonard Syndey</h1>
+            <FormModal
+              table='teacher'
+              type='update'
+              data={{
+                id: 1,
+                username: "teacher1",
+                email: "teacher@aljerischool.com",
+                password: "123",
+                firstname: "teacher",
+                lastname: "math",
+                phone:"123456",
+                address: "kuwait",
+                dob: "26-07-1991",
+                gender: "Male",
+                img:"https://img.freepik.com/free-photo/portrait-young-male-professor-education-day_23-2150980043.jpg",
+               }} />
+            </div>
             <p className='text-sm text-gray-600'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <div className='flex items-center justify-between gap-2 flex-wrap text-xs font-medium'>
               <div className='w-full md:w-1/3 lg:w-full flex items-center gap-2'>
