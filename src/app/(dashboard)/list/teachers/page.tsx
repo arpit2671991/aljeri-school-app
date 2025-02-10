@@ -9,6 +9,7 @@ import { Class, Subject, Teacher } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import { Prisma } from '@prisma/client'
 
 type TeacherList = Teacher & {subjects: Subject[]} & {classes: Class[]};
 
@@ -90,8 +91,32 @@ const {page, ...queryParams} = searchParams;
 
 const p = page ? parseInt(page) : 1;
 
+// URL PARAMS CONDITION
+
+const query: Prisma.TeacherWhereInput = {}
+
+if(queryParams){
+  for(const [key, value] of Object.entries(queryParams)){
+   
+    if(value !== undefined){
+      switch(key){
+        case "classId" :
+         query.lessons =
+            {some: 
+              {classId:parseInt(value),
+
+              }
+            }
+          
+      }
+    }
+    
+  }
+}
+
 const [data, count] = await prisma.$transaction([
    prisma.teacher.findMany({
+    where:query,
     include: {
       subjects: true,
       classes: true
@@ -99,7 +124,7 @@ const [data, count] = await prisma.$transaction([
     take: ITEM_PER_PAGE,
     skip: ITEM_PER_PAGE * (p - 1), 
 }),
-    prisma.teacher.count()
+    prisma.teacher.count({where:query})
 ])
 
 
