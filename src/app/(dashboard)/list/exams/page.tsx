@@ -10,7 +10,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-type ExamList = Exam & {lession:{
+type ExamList = Exam & {lesson:{
   subject: Subject,
   class: Class,
   teacher: Teacher
@@ -31,7 +31,7 @@ type ExamList = Exam & {lession:{
       className: "hidden md:table-cell",
     },
     {
-      header: "Date",
+      header: "Due Date",
       accessor: "date",
       className: "hidden md:table-cell",
     },
@@ -45,11 +45,11 @@ type ExamList = Exam & {lession:{
     <tr key={item.id} className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight'>
       <td className='flex items-center gap-4 p-4'>
         <div className='flex flex-col'>
-          <h3 className='font-semibold'>{item.lession.subject.name}</h3>
+          <h3 className='font-semibold'>{item.lesson.subject.name}</h3>
         </div>
       </td>
-      <td className="">{item.lession.class.name}</td>
-      <td className="hidden md:table-cell">{item.lession.teacher.name + " " + item.lession.teacher.surname}</td>
+      <td className="">{item.lesson.class.name}</td>
+      <td className="hidden md:table-cell">{item.lesson.teacher.name + " " + item.lesson.teacher.surname}</td>
       <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.startTime)}</td>
       <td>
         <div className='flex items-center gap-2'>
@@ -92,10 +92,10 @@ const ExamListPage =async ({
       if (value !== undefined) {
         switch (key) {
           case "classId":
-            query.classId = parseInt(value);
+            query.lesson = { classId: parseInt(value)};
             break;
           case "teacherId":
-            query.teacherId = value;
+            query.lesson ={ teacherId: value};
             break;
           case "search":
            query.lesson = {
@@ -156,9 +156,9 @@ const ExamListPage =async ({
       </div>
       </div>
       {/* List */}
-      <Table columns={columns} renderRow={renderRow} data={examsData}/>
+      <Table columns={columns} renderRow={renderRow} data={data}/>
     {/* Pagination */}
-    <Pagination />
+    <Pagination page={p} count={count} />
     </div>
   )
 }

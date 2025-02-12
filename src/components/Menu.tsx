@@ -1,7 +1,9 @@
+import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import Image from "next/image";
 
-export let role = "admin";
+
+
 
 const menuItems = [
   {
@@ -117,20 +119,17 @@ const menuItems = [
     ],
   },
 ];
-
-const Menu = () => {
+const Menu = async() => {
+  const user = await currentUser();
+  const role = user?.publicMetadata.role as string;
   return(
-    <div className="">
+    <div className="mt-4 text-sm">
       {menuItems.map((menuItem => (
         <div className="" key={menuItem.title}>
           <span className="hidden lg:block text-gray-400 font-light my-4">{menuItem.title}</span>
           {menuItem.items.map((i => {
             if(i.visible.includes(role)){
               return(
-
-              
-            
-           
             <Link href={i.href} key={i.href} className="flex items-center justify-center lg:justify-start gap-4 text-gray-300 py-2 md:px-2 rounded-md hover:bg-Purple hover:text-gray-900">
               <Image src={i.icon} alt="icon" width={20} height={20}   />
               <span className="hidden lg:block">{i.label}</span>
