@@ -1,13 +1,17 @@
+import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
-import { role, assignmentsData} from '@/lib/data'
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
+import { role } from '@/lib/utils'
 import { Assignment, Class, Prisma, Subject, Teacher } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
+
+
 
 type AssignmentList = Assignment & {lesson:{
   subject: Subject,
@@ -33,10 +37,10 @@ type AssignmentList = Assignment & {lesson:{
       accessor: "dueDate",
       className: "hidden md:table-cell",
     },
-    {
+    ...(role === "admin" ? [{
       header: "Actions",
       accessor: "action",
-    },
+    }] : []),
   ];
 
   const renderRow = (item:AssignmentList) => (
@@ -56,9 +60,19 @@ type AssignmentList = Assignment & {lesson:{
               <Image src="/view.png" alt='' width={16} height={16} />
             </button>
           </Link>
-            {role === "admin" && <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
-              <Image src="/delete.png" alt='' width={16} height={16} />
-            </button>}
+            {(role === "admin" ||  role === "teacher") && (
+
+              <>
+              
+
+              <FormModal table='assignment' type='update' data={item} />
+              <FormModal table='assignment' type='delete' id={item.id} />
+              
+              </>
+               
+            )}
+            
+            
         </div>
       </td>
     </tr>
@@ -142,7 +156,7 @@ const AssignmentsListPage = async ({
             <Image src="/sort.png" alt='filter' width={14} height={14}  />
           </button>
           {role === "admin" && <button className='w-8 h-8 flex items-center justify-center rounded-full bg-Yellow'>
-            <Image src="/plus.png" alt='filter' width={14} height={14}  />
+            <Image src="/create.png" alt='filter' width={14} height={14}  />
           </button>}
         </div>
       </div>
