@@ -4,7 +4,7 @@ import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
-import { role } from '@/lib/utils'
+import { currentUserId, role } from '@/lib/utils'
 import { Announcement, Class, Prisma } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -29,11 +29,12 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  ...(role === "admin" ? [{
+  ...(role === "admin" || role === "teacher" ? [{
     header: "Actions",
     accessor: "action",
   }] : []),
 ];
+
 
 const renderRow = (item: AnnouncementList) => (
   <tr key={item.id} className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight'>
@@ -42,7 +43,7 @@ const renderRow = (item: AnnouncementList) => (
         <h3 className='font-semibold'>{item.title}</h3>
       </div>
     </td>
-    <td className="">{item.class.name}</td>
+    <td className="">{item.class?.name || "-"}</td>
     <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.date)}</td>
     <td>
       <div className='flex items-center gap-2'>
@@ -51,7 +52,7 @@ const renderRow = (item: AnnouncementList) => (
             <Image src="/view.png" alt='' width={16} height={16} />
           </button>
         </Link>
-        {role === "admin" && (
+        {role === "admin" || role === "teacher" && (
           <>
             <FormModal table='announcement' type='update' data={item} />
             <FormModal table='announcement' type='delete' id={item.id} />
@@ -61,6 +62,7 @@ const renderRow = (item: AnnouncementList) => (
     </td>
   </tr>
 )
+
 
 const AnnouncementsListPage = async ({
   searchParams,
@@ -88,6 +90,28 @@ const AnnouncementsListPage = async ({
     }
   }
 
+
+
+  const roleConditions = {
+    
+    admin:{lessons:{}},
+    teacher: {lessons: {some: {teacherId: currentUserId!}}},
+    student: {students: {some: {id: currentUserId!}}},
+    parent: {students: {some: {parentId: currentUserId!}}},
+  }
+  
+
+    query.OR = [
+      {classId: null}, 
+      {
+      class: roleConditions[role as keyof typeof roleConditions] || {},
+      },
+  ];
+  
+
+  console.log(query)
+   
+
   const [data, count] = await prisma.$transaction([
     prisma.announcement.findMany({
       where: query,
@@ -99,6 +123,8 @@ const AnnouncementsListPage = async ({
     }),
     prisma.announcement.count({ where: query }),
   ])
+
+ 
 
   return (
     <div className='bg-white p-4 rounded-md flex-1 m-4 mt-0'>

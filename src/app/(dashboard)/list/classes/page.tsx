@@ -2,9 +2,9 @@ import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
-import { role, classesData} from '@/lib/data'
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
+import { role } from '@/lib/utils'
 import { Class, Prisma, Teacher } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -32,10 +32,11 @@ type ClassList = Class & {supervisor: Teacher}
       accessor: "supervisor",
       className: "hidden md:table-cell",
     },
-    {
+
+   ...(role === "admin" ? [ {
       header: "Actions",
       accessor: "action",
-    },
+    }] : [])
   ];
 
   const renderRow = (item:ClassList) => (
@@ -55,11 +56,17 @@ type ClassList = Class & {supervisor: Teacher}
               <Image src="/view.png" alt='' width={16} height={16} />
             </button>
           </Link>
-            {role === "admin" && 
+            {role === "admin" && (
+              <>
+              <FormModal table='class' type='update' data={item} />  
+               <FormModal table='class' type='delete' id={item.id} />  
+              </>
+             
+            )
             // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
             //   <Image src="/delete.png" alt='' width={16} height={16} />
             // </button>
-            <FormModal table='class' type='delete' id={item.id} />
+          
             }
         </div>
       </td>

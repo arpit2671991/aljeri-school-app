@@ -2,9 +2,9 @@ import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
-import { role, lessonsData} from '@/lib/data'
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
+import { role } from '@/lib/utils'
 import { Class, Lesson, Prisma, Subject, Teacher } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -26,10 +26,10 @@ type LessionList = Lesson & {subject: Subject} & {class: Class} & {teacher: Teac
       accessor: "teacher",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "action",
-    },
+     ...(role === "admin" ? [{
+            header: "Actions",
+            accessor: "action",
+          }] : []),
   ];
 
   const renderRow = (item:LessionList) => (
@@ -43,16 +43,19 @@ type LessionList = Lesson & {subject: Subject} & {class: Class} & {teacher: Teac
       <td className="hidden md:table-cell">{item.teacher.name + " " + item.teacher.surname}</td>
       <td>
         <div className='flex items-center gap-2'>
-          <Link href={`/list/subjects/${item.id}`}>
+          {/* <Link href={`/list/subjects/${item.id}`}>
             <button className='w-7 h-7 flex items-center justify-center rounded-full bg-sky'>
               <Image src="/view.png" alt='' width={16} height={16} />
             </button>
-          </Link>
-            {role === "admin" && 
-            // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
-            //   <Image src="/delete.png" alt='' width={16} height={16} />
-            // </button>
-            <FormModal table='lession' type='delete' id={item.id} />
+          </Link> */}
+            {role === "admin" && (
+              <>
+              <FormModal table='lession' type='update' data={item} />
+              <FormModal table='lession' type='delete' id={item.id} />
+              </>
+            )
+           
+            
             }
         </div>
       </td>
