@@ -35,7 +35,7 @@ type ExamList = Exam & {lesson:{
       accessor: "date",
       className: "hidden md:table-cell",
     },
-     ...(role === "admin" || role === "teacher" ? [{
+     ...(role === "admin" ? [{
         header: "Actions",
         accessor: "action",
       }] : []),
@@ -53,16 +53,26 @@ type ExamList = Exam & {lesson:{
       <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.startTime)}</td>
       <td>
         <div className='flex items-center gap-2'>
-          <Link href={`/list/exams/${item.id}`}>
+          {/* <Link href={`/list/exams/${item.id}`}>
             <button className='w-7 h-7 flex items-center justify-center rounded-full bg-sky'>
               <Image src="/view.png" alt='' width={16} height={16} />
             </button>
-          </Link>
+          </Link> */}
             {role === "admin" && 
+
+            (
+
+
+              <>
+                <FormModal table='exam' type='update' data={item} />
+                <FormModal table='exam' type='delete' id={item.id} />
+              
+              </>
+            )
             // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
             //   <Image src="/delete.png" alt='' width={16} height={16} />
             // </button>
-            <FormModal table='exam' type='delete' id={item.id} />
+        
             }
         </div>
       </td>

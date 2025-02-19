@@ -2,9 +2,10 @@ import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
-import { role, subjectsData} from '@/lib/data'
+
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
+import { role } from '@/lib/utils'
 import { Prisma, Subject, Teacher } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -22,10 +23,10 @@ type SubjectList = Subject & {teachers: Teacher[]}
       accessor: "teachers",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "action",
-    },
+   ...(role === "admin" ? [{
+     header: "Actions", 
+     accesor: "actions" 
+   }]:[])
   ];
 
   const renderRow = (item:SubjectList) => (
@@ -38,16 +39,22 @@ type SubjectList = Subject & {teachers: Teacher[]}
       <td className='hidden md:table-cell'>{item.teachers.map(teacher => teacher.name).join(",")}</td>
       <td>
         <div className='flex items-center gap-2'>
-          <Link href={`/list/subjects/${item.id}`}>
+          {/* <Link href={`/list/subjects/${item.id}`}>
             <button className='w-7 h-7 flex items-center justify-center rounded-full bg-sky'>
               <Image src="/view.png" alt='' width={16} height={16} />
             </button>
-          </Link>
-            {role === "admin" && 
+          </Link> */}
+            {role === "admin" && (
+              <>
+                <FormModal table='subject' type='update' data={item} />
+                <FormModal table='subject' type='delete' id={item.id} />
+              
+              </>
+            )
             // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
             //   <Image src="/delete.png" alt='' width={16} height={16} />
             // </button>
-            <FormModal table='subject' type='delete' id={item.id} />
+    
             }
         </div>
       </td>

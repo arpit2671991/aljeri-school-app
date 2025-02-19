@@ -4,9 +4,9 @@ import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
 import TableSearch from '@/components/TableSearch'
-import { parentsData, role} from '@/lib/data'
 import prisma from '@/lib/prisma'
 import { ITEM_PER_PAGE } from '@/lib/settings'
+import { role } from '@/lib/utils'
 import { Parent, Prisma, Student } from '@prisma/client'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -62,12 +62,13 @@ const renderRow = (item: ParentList) => (
       <div className="flex items-center gap-2">
         {role === "admin" && (
           <>
-          {role === "admin" && 
-          // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
+        
+          {/* // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
           //   <Image src="/delete.png" alt='' width={16} height={16} />
-          // </button>
+          // </button> */}
+           <FormModal table="parent" type='update' data={item} />
           <FormModal table="parent" type='delete' id={item.id} />
-          }
+          
           </>
         )}
       </div>
@@ -136,7 +137,8 @@ const ParentListPage = async ({
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            <FormModal table='parent' type='create'/>
+            {role === "admin" &&    <FormModal table='parent' type='create'/>}
+         
           </div>
         </div>
       </div>

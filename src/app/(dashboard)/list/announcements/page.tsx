@@ -29,7 +29,7 @@ const columns = [
     accessor: "date",
     className: "hidden md:table-cell",
   },
-  ...(role === "admin" || role === "teacher" ? [{
+  ...(role === "admin"  ? [{
     header: "Actions",
     accessor: "action",
   }] : []),
@@ -47,12 +47,12 @@ const renderRow = (item: AnnouncementList) => (
     <td className="hidden md:table-cell">{new Intl.DateTimeFormat("en-US").format(item.date)}</td>
     <td>
       <div className='flex items-center gap-2'>
-        <Link href={`/list/exams/${item.id}`}>
+        {/* <Link href={`/list/exams/${item.id}`}>
           <button className='w-7 h-7 flex items-center justify-center rounded-full bg-sky'>
             <Image src="/view.png" alt='' width={16} height={16} />
           </button>
-        </Link>
-        {role === "admin" || role === "teacher" && (
+        </Link> */}
+        {role === "admin" && (
           <>
             <FormModal table='announcement' type='update' data={item} />
             <FormModal table='announcement' type='delete' id={item.id} />

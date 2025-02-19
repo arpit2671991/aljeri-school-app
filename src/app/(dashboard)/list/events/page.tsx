@@ -65,7 +65,7 @@ type EventList = Event & {class: Class}
       <td>
         <div className='flex items-center gap-2'>
          
-            {role === "admin" || role === "teacher" && (
+            {role === "admin"  && (
               <>
                 <FormModal table='event' type='update' data={item} />
                 <FormModal table='event' type='delete' id={item.id} />
