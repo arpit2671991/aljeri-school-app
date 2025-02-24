@@ -5,7 +5,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+
 const SingleStudentPage = () => {
+
+ 
   return (
     <div className='flex-1 p-4 flex flex-col gap-4 xl:flex-row'>
       {/* Left */}
@@ -67,7 +70,7 @@ const SingleStudentPage = () => {
         {/* bottom */}
         <div className='mt-4 bg-white rounded-md p-4 h-[800px]'>
           <h1>Student&apos;s Schedule</h1>
-          <BigCalendar />
+          <BigCalendar  />
         </div>
       </div>
       {/* Right */}

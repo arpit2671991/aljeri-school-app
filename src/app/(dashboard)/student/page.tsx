@@ -1,17 +1,30 @@
 import Announcement from "@/components/Announcement"
 import BigCalendar from "@/components/BigCalendar"
+import BigCalendarContainer from "@/components/BigCalendarContainer"
 import EventCalender from "@/components/EventCalender"
+import prisma from "@/lib/prisma"
+import { auth } from "@clerk/nextjs/server"
 
 
 
-const StudentPage = () => {
+const StudentPage = async() => {
+
+  const {userId} = await auth();
+
+  const classItem = await prisma.class.findMany({
+    where:{
+      students:{some: {id: userId!}},
+    },
+  })
+
+  console.log(classItem)
   return (
     <div className=" p-4 flex flex-col gap-4 xl:flex-row">
       {/* Left */}
       <div className="w-full xl:w-2/3">
         <div className="h-full bg-white rounded-md p-4">
           <h1 className="text-xl font-semibold">Schedule (4A)</h1>
-          <BigCalendar />
+          <BigCalendarContainer type='classId' id={classItem[0].id} />
         </div>
       </div>
       {/* Right */}
