@@ -1,3 +1,4 @@
+import FormContainer from '@/components/FormContainer'
 import FormModal from '@/components/FormModal'
 import Pagination from '@/components/Pagination'
 import Table from '@/components/Table'
@@ -51,21 +52,15 @@ type ClassList = Class & {supervisor: Teacher}
       <td className="hidden md:table-cell">{item.supervisor.name + " " + item.supervisor.surname}</td>
       <td>
         <div className='flex items-center gap-2'>
-          {/* <Link href={`/list/subjects/${item.id}`}>
-            <button className='w-7 h-7 flex items-center justify-center rounded-full bg-sky'>
-              <Image src="/view.png" alt='' width={16} height={16} />
-            </button>
-          </Link> */}
+         
             {role === "admin" && (
               <>
-              <FormModal table='class' type='update' data={item} />  
-               <FormModal table='class' type='delete' id={item.id} />  
+              <FormContainer table='class' type='update' data={item} />  
+               <FormContainer table='class' type='delete' id={item.id} />  
               </>
              
             )
-            // <button className='w-7 h-7 flex items-center justify-center rounded-full bg-Purple'>
-            //   <Image src="/delete.png" alt='' width={16} height={16} />
-            // </button>
+           
           
             }
         </div>
@@ -145,7 +140,7 @@ const ClassListPage = async ({
           // <button className='w-8 h-8 flex items-center justify-center rounded-full bg-Yellow'>
           //   <Image src="/plus.png" alt='filter' width={14} height={14}  />
           // </button>
-          <FormModal table='class' type='create' />
+          <FormContainer table='class' type='create' />
           }
         </div>
       </div>
